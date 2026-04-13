@@ -129,6 +129,7 @@ Pick your agent. One command. Done.
 | **Claude Code** | `claude plugin marketplace add JuliusBrussee/caveman && claude plugin install caveman@caveman` |
 | **Codex** | Clone repo → `/plugins` → Search "Caveman" → Install |
 | **Gemini CLI** | `gemini extensions install https://github.com/JuliusBrussee/caveman` |
+| **Kiro** | Clone repo → skills auto-load from `.kiro/` directory |
 | **Cursor** | `npx skills add JuliusBrussee/caveman -a cursor` |
 | **Windsurf** | `npx skills add JuliusBrussee/caveman -a windsurf` |
 | **Copilot** | `npx skills add JuliusBrussee/caveman -a github-copilot` |
@@ -139,19 +140,19 @@ Install once. Use in every session for that install target after that. One rock.
 
 ### What You Get
 
-Auto-activation is built in for Claude Code, Gemini CLI, and the repo-local Codex setup below. `npx skills add` installs the skill for other agents, but does **not** install repo rule/instruction files, so Caveman does not auto-start there unless you add the always-on snippet below.
+Auto-activation is built in for Claude Code, Gemini CLI, Kiro, and the repo-local Codex setup below. `npx skills add` installs the skill for other agents, but does **not** install repo rule/instruction files, so Caveman does not auto-start there unless you add the always-on snippet below.
 
-| Feature | Claude Code | Codex | Gemini CLI | Cursor | Windsurf | Cline | Copilot |
-|---------|:-----------:|:-----:|:----------:|:------:|:--------:|:-----:|:-------:|
-| Caveman mode | Y | Y | Y | Y | Y | Y | Y |
-| Auto-activate every session | Y | Y¹ | Y | —² | —² | —² | —² |
-| `/caveman` command | Y | Y¹ | Y | — | — | — | — |
-| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y³ | Y³ | — | — |
-| Statusline badge | Y⁴ | — | — | — | — | — | — |
-| caveman-commit | Y | — | Y | Y | Y | Y | Y |
-| caveman-review | Y | — | Y | Y | Y | Y | Y |
-| caveman-compress | Y | Y | Y | Y | Y | Y | Y |
-| caveman-help | Y | — | Y | Y | Y | Y | Y |
+| Feature | Claude Code | Codex | Gemini CLI | Kiro | Cursor | Windsurf | Cline | Copilot |
+|---------|:-----------:|:-----:|:----------:|:----:|:------:|:--------:|:-----:|:-------:|
+| Caveman mode | Y | Y | Y | Y | Y | Y | Y | Y |
+| Auto-activate every session | Y | Y¹ | Y | Y⁵ | —² | —² | —² | —² |
+| `/caveman` command | Y | Y¹ | Y | Y⁵ | — | — | — | — |
+| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y⁵ | Y³ | Y³ | — | — |
+| Statusline badge | Y⁴ | — | — | — | — | — | — | — |
+| caveman-commit | Y | — | Y | Y | Y | Y | Y | Y |
+| caveman-review | Y | — | Y | Y | Y | Y | Y | Y |
+| caveman-compress | Y | Y | Y | Y | Y | Y | Y | Y |
+| caveman-help | Y | — | Y | Y | Y | Y | Y | Y |
 
 > [!NOTE]
 > Auto-activation works differently per agent: Claude Code uses SessionStart hooks, this repo's Codex dogfood setup uses `.codex/hooks.json`, Gemini uses context files. Cursor/Windsurf/Cline/Copilot can be made always-on, but `npx skills add` installs only the skill, not the repo rule/instruction files.
@@ -160,6 +161,7 @@ Auto-activation is built in for Claude Code, Gemini CLI, and the repo-local Code
 > ² Add the "Want it always on?" snippet below to those agents' system prompt or rule file if you want session-start activation.
 > ³ Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
 > ⁴ Available in Claude Code, but plugin install only nudges setup. Standalone `install.sh` / `install.ps1` configures it automatically when no custom `statusLine` exists.
+> ⁵ Kiro loads `.kiro/steering/caveman.md` (always-on) + `.kiro/skills/caveman/SKILL.md` (on-demand via `/caveman` slash command). Skills support native slash commands in Kiro.
 
 <details>
 <summary><strong>Claude Code — full details</strong></summary>
@@ -223,6 +225,32 @@ Auto-activates via `GEMINI.md` context file. Also ships custom Gemini commands:
 </details>
 
 <details>
+<summary><strong>Kiro — full details</strong></summary>
+
+Kiro supports caveman natively via its steering and skills system. This repo ships:
+
+- `.kiro/steering/caveman.md` — always-on steering file, auto-activates every session
+- `.kiro/skills/caveman/SKILL.md` — full skill with intensity levels, available as `/caveman` slash command
+
+**Clone or fork:**
+```bash
+git clone https://github.com/JuliusBrussee/caveman
+```
+
+Open the repo in Kiro — caveman activates immediately via the steering file. Use `/caveman` in chat to switch intensity levels.
+
+**Import skill into any Kiro project:**
+1. Open Agent Steering & Skills in the Kiro panel
+2. Click + → Import a skill
+3. Paste: `https://github.com/JuliusBrussee/caveman/tree/main/skills/caveman`
+
+For always-on behavior outside this repo, create `.kiro/steering/caveman.md` with `inclusion: always` frontmatter and the activation snippet from "Want it always on?" below.
+
+Alternatively: `npx skills add JuliusBrussee/caveman -a kiro-cli`
+
+</details>
+
+<details>
 <summary><strong>Cursor / Windsurf / Cline / Copilot — full details</strong></summary>
 
 `npx skills add` installs the skill file only — it does **not** install the agent's rule/instruction file, so caveman does not auto-start. For always-on, add the "Want it always on?" snippet below to your agent's rules or system prompt.
@@ -241,7 +269,7 @@ Copilot works with Chat, Edits, and Coding Agent.
 </details>
 
 <details>
-<summary><strong>Any other agent (opencode, Roo, Amp, Goose, Kiro, and 40+ more)</strong></summary>
+<summary><strong>Any other agent (opencode, Roo, Amp, Goose, and 40+ more)</strong></summary>
 
 [npx skills](https://github.com/vercel-labs/skills) supports 40+ agents:
 
@@ -250,7 +278,6 @@ npx skills add JuliusBrussee/caveman           # auto-detect agent
 npx skills add JuliusBrussee/caveman -a amp
 npx skills add JuliusBrussee/caveman -a augment
 npx skills add JuliusBrussee/caveman -a goose
-npx skills add JuliusBrussee/caveman -a kiro-cli
 npx skills add JuliusBrussee/caveman -a roo
 # ... and many more
 ```
@@ -276,6 +303,7 @@ Where to put it:
 | Agent | File |
 |-------|------|
 | opencode | `.config/opencode/AGENTS.md` |
+| Kiro | `.kiro/steering/caveman.md` (with `inclusion: always` frontmatter) |
 | Roo | `.roo/rules/caveman.md` |
 | Amp | your workspace system prompt |
 | Others | your agent's system prompt or rules file |

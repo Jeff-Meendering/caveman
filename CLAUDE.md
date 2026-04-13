@@ -51,6 +51,8 @@ Overwritten by CI on push to main when sources change. Edits here lost.
 | `.github/copilot-instructions.md` | `rules/caveman-activate.md` |
 | `.cursor/rules/caveman.mdc` | `rules/caveman-activate.md` + Cursor frontmatter |
 | `.windsurf/rules/caveman.md` | `rules/caveman-activate.md` + Windsurf frontmatter |
+| `.kiro/skills/caveman/SKILL.md` | `skills/caveman/SKILL.md` |
+| `.kiro/steering/caveman.md` | `rules/caveman-activate.md` + Kiro frontmatter |
 
 ---
 
@@ -61,7 +63,7 @@ Overwritten by CI on push to main when sources change. Edits here lost.
 What it does:
 1. Copies `skills/caveman/SKILL.md` to all agent-specific SKILL.md locations
 2. Rebuilds `caveman.skill` as a ZIP of `skills/caveman/`
-3. Rebuilds all agent rule files from `rules/caveman-activate.md`, prepending agent-specific frontmatter (Cursor needs `alwaysApply: true`, Windsurf needs `trigger: always_on`)
+3. Rebuilds all agent rule files from `rules/caveman-activate.md`, prepending agent-specific frontmatter (Cursor needs `alwaysApply: true`, Windsurf needs `trigger: always_on`, Kiro needs `inclusion: always`)
 4. Commits and pushes with `[skip ci]` to avoid loops
 
 CI bot commits as `github-actions[bot]`. After PR merge, wait for workflow before declaring release complete.
@@ -156,6 +158,7 @@ How caveman reaches each agent type:
 | Gemini CLI | Extension with `GEMINI.md` context file | Yes — context file loads every session |
 | Cursor | `.cursor/rules/caveman.mdc` with `alwaysApply: true` | Yes — always-on rule |
 | Windsurf | `.windsurf/rules/caveman.md` with `trigger: always_on` | Yes — always-on rule |
+| Kiro | `.kiro/steering/caveman.md` with `inclusion: always` + `.kiro/skills/caveman/SKILL.md` | Yes — always-on steering |
 | Cline | `.clinerules/caveman.md` (auto-discovered) | Yes — Cline injects all .clinerules files |
 | Copilot | `.github/copilot-instructions.md` + `AGENTS.md` | Yes — repo-wide instructions |
 | Others | `npx skills add JuliusBrussee/caveman` | No — user must say `/caveman` each session |

@@ -130,6 +130,7 @@ Pick your agent. One command. Done.
 | **Codex** | Clone repo → `/plugins` → Search "Caveman" → Install |
 | **Gemini CLI** | `gemini extensions install https://github.com/JuliusBrussee/caveman` |
 | **Kiro** | Clone repo → skills auto-load from `.kiro/` directory |
+| **Amazon Q** | Clone repo → rules auto-load from `.amazonq/rules/` directory |
 | **Cursor** | `npx skills add JuliusBrussee/caveman -a cursor` |
 | **Windsurf** | `npx skills add JuliusBrussee/caveman -a windsurf` |
 | **Copilot** | `npx skills add JuliusBrussee/caveman -a github-copilot` |
@@ -140,19 +141,19 @@ Install once. Use in every session for that install target after that. One rock.
 
 ### What You Get
 
-Auto-activation is built in for Claude Code, Gemini CLI, Kiro, and the repo-local Codex setup below. `npx skills add` installs the skill for other agents, but does **not** install repo rule/instruction files, so Caveman does not auto-start there unless you add the always-on snippet below.
+Auto-activation is built in for Claude Code, Gemini CLI, Kiro, Amazon Q, and the repo-local Codex setup below. `npx skills add` installs the skill for other agents, but does **not** install repo rule/instruction files, so Caveman does not auto-start there unless you add the always-on snippet below.
 
-| Feature | Claude Code | Codex | Gemini CLI | Kiro | Cursor | Windsurf | Cline | Copilot |
-|---------|:-----------:|:-----:|:----------:|:----:|:------:|:--------:|:-----:|:-------:|
-| Caveman mode | Y | Y | Y | Y | Y | Y | Y | Y |
-| Auto-activate every session | Y | Y¹ | Y | Y⁵ | —² | —² | —² | —² |
-| `/caveman` command | Y | Y¹ | Y | Y⁵ | — | — | — | — |
-| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y⁵ | Y³ | Y³ | — | — |
-| Statusline badge | Y⁴ | — | — | — | — | — | — | — |
-| caveman-commit | Y | — | Y | Y | Y | Y | Y | Y |
-| caveman-review | Y | — | Y | Y | Y | Y | Y | Y |
-| caveman-compress | Y | Y | Y | Y | Y | Y | Y | Y |
-| caveman-help | Y | — | Y | Y | Y | Y | Y | Y |
+| Feature | Claude Code | Codex | Gemini CLI | Kiro | Amazon Q | Cursor | Windsurf | Cline | Copilot |
+|---------|:-----------:|:-----:|:----------:|:----:|:--------:|:------:|:--------:|:-----:|:-------:|
+| Caveman mode | Y | Y | Y | Y | Y | Y | Y | Y | Y |
+| Auto-activate every session | Y | Y¹ | Y | Y⁵ | Y⁶ | —² | —² | —² | —² |
+| `/caveman` command | Y | Y¹ | Y | Y⁵ | — | — | — | — | — |
+| Mode switching (lite/full/ultra) | Y | Y¹ | Y | Y⁵ | — | Y³ | Y³ | — | — |
+| Statusline badge | Y⁴ | — | — | — | — | — | — | — | — |
+| caveman-commit | Y | — | Y | Y | — | Y | Y | Y | Y |
+| caveman-review | Y | — | Y | Y | — | Y | Y | Y | Y |
+| caveman-compress | Y | Y | Y | Y | — | Y | Y | Y | Y |
+| caveman-help | Y | — | Y | Y | — | Y | Y | Y | Y |
 
 > [!NOTE]
 > Auto-activation works differently per agent: Claude Code uses SessionStart hooks, this repo's Codex dogfood setup uses `.codex/hooks.json`, Gemini uses context files. Cursor/Windsurf/Cline/Copilot can be made always-on, but `npx skills add` installs only the skill, not the repo rule/instruction files.
@@ -162,6 +163,7 @@ Auto-activation is built in for Claude Code, Gemini CLI, Kiro, and the repo-loca
 > ³ Cursor and Windsurf receive the full SKILL.md with all intensity levels. Mode switching works on-demand via the skill; no slash command.
 > ⁴ Available in Claude Code, but plugin install only nudges setup. Standalone `install.sh` / `install.ps1` configures it automatically when no custom `statusLine` exists.
 > ⁵ Kiro loads `.kiro/steering/caveman.md` (always-on) + `.kiro/skills/caveman/SKILL.md` (on-demand via `/caveman` slash command). Skills support native slash commands in Kiro.
+> ⁶ Amazon Q auto-loads all `.md` files in `.amazonq/rules/`. Rules are always-on but can be toggled per session via the Rules button in chat. No skill/plugin system — only the activation rule is shipped.
 
 <details>
 <summary><strong>Claude Code — full details</strong></summary>
@@ -259,6 +261,30 @@ Alternatively: `npx skills add Jeff-Meendering/caveman -a kiro-cli` (skill only,
 </details>
 
 <details>
+<summary><strong>Amazon Q Developer — full details</strong></summary>
+
+Amazon Q loads all `.md` files in `.amazonq/rules/` automatically. This repo ships `.amazonq/rules/caveman.md` — caveman activates on every chat.
+
+**Working on this repo?** Clone and open in your IDE with Amazon Q. Done.
+
+```bash
+git clone https://github.com/Jeff-Meendering/caveman
+```
+
+**Want caveman in another project?** Copy the rule file:
+
+```bash
+mkdir -p .amazonq/rules
+curl -sL https://raw.githubusercontent.com/Jeff-Meendering/caveman/main/.amazonq/rules/caveman.md -o .amazonq/rules/caveman.md
+```
+
+Toggle on/off per session via the **Rules** button in Amazon Q chat.
+
+> **Note:** Amazon Q has no skill/plugin system, so only the activation rule is available — no mode switching, caveman-commit, caveman-review, or caveman-compress.
+
+</details>
+
+<details>
 <summary><strong>Cursor / Windsurf / Cline / Copilot — full details</strong></summary>
 
 `npx skills add` installs the skill file only — it does **not** install the agent's rule/instruction file, so caveman does not auto-start. For always-on, add the "Want it always on?" snippet below to your agent's rules or system prompt.
@@ -312,6 +338,7 @@ Where to put it:
 |-------|------|
 | opencode | `.config/opencode/AGENTS.md` |
 | Kiro | `.kiro/steering/caveman.md` (with `inclusion: always` frontmatter) |
+| Amazon Q | `.amazonq/rules/caveman.md` |
 | Roo | `.roo/rules/caveman.md` |
 | Amp | your workspace system prompt |
 | Others | your agent's system prompt or rules file |

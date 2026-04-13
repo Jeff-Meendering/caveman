@@ -53,6 +53,7 @@ Overwritten by CI on push to main when sources change. Edits here lost.
 | `.windsurf/rules/caveman.md` | `rules/caveman-activate.md` + Windsurf frontmatter |
 | `.kiro/skills/caveman/SKILL.md` | `skills/caveman/SKILL.md` |
 | `.kiro/steering/caveman.md` | `rules/caveman-activate.md` + Kiro frontmatter |
+| `.amazonq/rules/caveman.md` | `rules/caveman-activate.md` |
 
 ---
 
@@ -159,6 +160,7 @@ How caveman reaches each agent type:
 | Cursor | `.cursor/rules/caveman.mdc` with `alwaysApply: true` | Yes — always-on rule |
 | Windsurf | `.windsurf/rules/caveman.md` with `trigger: always_on` | Yes — always-on rule |
 | Kiro | `.kiro/steering/caveman.md` with `inclusion: always` + `.kiro/skills/caveman/SKILL.md` | Yes — always-on steering |
+| Amazon Q | `.amazonq/rules/caveman.md` (auto-discovered) | Yes — Q loads all rules in `.amazonq/rules/` |
 | Cline | `.clinerules/caveman.md` (auto-discovered) | Yes — Cline injects all .clinerules files |
 | Copilot | `.github/copilot-instructions.md` + `AGENTS.md` | Yes — repo-wide instructions |
 | Others | `npx skills add JuliusBrussee/caveman` | No — user must say `/caveman` each session |

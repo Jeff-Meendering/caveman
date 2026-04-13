@@ -227,26 +227,34 @@ Auto-activates via `GEMINI.md` context file. Also ships custom Gemini commands:
 <details>
 <summary><strong>Kiro — full details</strong></summary>
 
-Kiro supports caveman natively via its steering and skills system. This repo ships:
+Kiro supports caveman natively via its steering and skills system. This repo ships two files:
 
 - `.kiro/steering/caveman.md` — always-on steering file, auto-activates every session
 - `.kiro/skills/caveman/SKILL.md` — full skill with intensity levels, available as `/caveman` slash command
 
-**Clone or fork:**
+**Working on this repo?** Clone and open in Kiro. Done — caveman activates immediately.
+
 ```bash
-git clone https://github.com/JuliusBrussee/caveman
+git clone https://github.com/Jeff-Meendering/caveman
 ```
 
-Open the repo in Kiro — caveman activates immediately via the steering file. Use `/caveman` in chat to switch intensity levels.
+**Want caveman in every Kiro project?** Global install — two files, once:
 
-**Import skill into any Kiro project:**
+```bash
+mkdir -p ~/.kiro/skills/caveman ~/.kiro/steering
+curl -sL https://raw.githubusercontent.com/Jeff-Meendering/caveman/main/skills/caveman/SKILL.md -o ~/.kiro/skills/caveman/SKILL.md
+curl -sL https://raw.githubusercontent.com/Jeff-Meendering/caveman/main/.kiro/steering/caveman.md -o ~/.kiro/steering/caveman.md
+```
+
+**Import skill into one project (no auto-activation):**
 1. Open Agent Steering & Skills in the Kiro panel
 2. Click + → Import a skill
-3. Paste: `https://github.com/JuliusBrussee/caveman/tree/main/skills/caveman`
+3. Paste: `https://github.com/Jeff-Meendering/caveman/tree/main/skills/caveman`
+4. Say `/caveman` or "caveman mode" each session to activate
 
-For always-on behavior outside this repo, create `.kiro/steering/caveman.md` with `inclusion: always` frontmatter and the activation snippet from "Want it always on?" below.
+For always-on in a single project, also create `.kiro/steering/caveman.md` with `inclusion: always` frontmatter and the activation snippet from "Want it always on?" below.
 
-Alternatively: `npx skills add JuliusBrussee/caveman -a kiro-cli`
+Alternatively: `npx skills add Jeff-Meendering/caveman -a kiro-cli` (skill only, no auto-activation)
 
 </details>
 
